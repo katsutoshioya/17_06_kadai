@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.ArrayList;
 import java.util.Random;
-
 
 public class App extends Application {
     public static void main(String[] args) {
@@ -21,33 +21,33 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        String[] numbers_array = {"1","2"/*,"3","4","5","6","7","8","9"*/};
+        String[] numbers_array = {"1","2","3","4","5","6","7","8","9"};
         //String hoge = "1";
         //String[] hoge_array = {new String("1"), new String("2")}
 
         // Labelの作成
-        Label label01 = new Label("1");
-        Label label02 = new Label("1");
-        Label label03 = new Label("1");
-
+        ArrayList<MyLabel> label_array = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            label_array.add(new MyLabel());
+        }
         Random rand = new Random();
         Timeline timer01 = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             // 0~配列の大きさの乱数を生成
             int randomNumbers = rand.nextInt(numbers_array.length);
             // numbers_arrayから乱数を元に配列の値を取得 numbers_array[0] -> 0番目の要素を取得
-            label01.setText(numbers_array[randomNumbers]);
+            label_array.get(0).setText(numbers_array[randomNumbers]);
         }));
         Timeline timer02 = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             // 0~配列の大きさの乱数を生成
             int randomNumbers = rand.nextInt(numbers_array.length);
             // numbers_arrayから乱数を元に配列の値を取得 numbers_array[0] -> 0番目の要素を取得
-            label02.setText(numbers_array[randomNumbers]);
+            label_array.get(1).setText(numbers_array[randomNumbers]);
         }));
         Timeline timer03 = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             // 0~配列の大きさの乱数を生成
             int randomNumbers = rand.nextInt(numbers_array.length);
             // numbers_arrayから乱数を元に配列の値を取得 numbers_array[0] -> 0番目の要素を取得
-            label03.setText(numbers_array[randomNumbers]);
+            label_array.get(2).setText(numbers_array[randomNumbers]);
         }));
 
 
@@ -69,7 +69,8 @@ public class App extends Application {
             timer01.stop();
             timer02.stop();
             timer03.stop();
-            if (label01==label02 && label01==label03) {
+            if (label_array.get(0).getText().equals(label_array.get(1).getText()) &&
+                    label_array.get(0).getText().equals(label_array.get(2).getText())){
                 Stage newStage = new Stage();
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.initOwner(stage);
@@ -84,13 +85,12 @@ public class App extends Application {
         });
 
         HBox hBox01 = new HBox(20d);
+        hBox01.setPadding(new Insets(10, 10, 10, 10));
         hBox01.setAlignment(Pos.CENTER);
-        //hBox01.setBorder();
-        hBox01.getChildren().add(label01);
-        hBox01.getChildren().add(label02);
-        hBox01.getChildren().add(label03);
+        hBox01.getChildren().addAll(label_array);
 
         HBox hBox02 = new HBox(20d);
+        hBox02.setPadding(new Insets(10,10,10,10));
         hBox02.setAlignment(Pos.CENTER);
         hBox02.getChildren().add(start_button);
         hBox02.getChildren().add(stop_button);
